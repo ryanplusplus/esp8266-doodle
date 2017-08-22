@@ -3,4 +3,4 @@ http://sudosu.co.uk/getting-started-with-nodemcu-esp8266-development-kit -> This
 The baudrate should be 115200
 
 http://nodemcu.com/index_en.html 
-
+https://nodemcu.readthedocs.io/en/master/
