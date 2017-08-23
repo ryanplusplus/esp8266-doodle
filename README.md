@@ -6,6 +6,13 @@ http://nodemcu.com/index_en.html
 https://nodemcu.readthedocs.io/en/master/
 
 ## Resources
+### NodeMCU Documentation
+https://nodemcu.readthedocs.io/en/master/
+
+### Fancy Framework
+https://github.com/devyte/nodemcu-platform
+
+## Tools
 ### Firmware Build Service
 https://nodemcu-build.com/
 
