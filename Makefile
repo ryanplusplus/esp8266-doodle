@@ -1,16 +1,6 @@
 FIRMWARE?=firmware/nodemcu-master-13-modules-2017-08-22-13-11-15-integer.bin
 
-ifdef OS
-HOST:=windows
-else
-ifeq ($(shell uname),Darwin)
-HOST:=mac
-else
-ifeq ($(shell uname),Linux)
-HOST:=linux
-endif
-endif
-endif
+include os.mk
 
 ifeq ($(HOST),linux)
 SERIAL_PORT?=/dev/ttyUSB0
