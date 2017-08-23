@@ -9,6 +9,10 @@ https://nodemcu.readthedocs.io/en/master/
 ### Firmware Build Service
 https://nodemcu-build.com/
 
+Included firmware built with:
+
+adc, bit, file, gpio, http, hx711, net, node, pwm, spi, tmr, uart, wifi
+
 ### Firmware Flasher
 https://github.com/espressif/esptool
 
