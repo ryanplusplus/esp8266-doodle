@@ -48,8 +48,8 @@ endif
 flash_firmware:
 	esptool.py --baud 115200 --port $(SERIAL_PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE) 0x3fc000 firmware/esp_init_data_default.bin
 
-upload_blinky:
-	cd blinky; nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
+flash_%:
+	cd $*; nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
 
 erase:
 	nodemcu-uploader --port $(SERIAL_PORT) file format
