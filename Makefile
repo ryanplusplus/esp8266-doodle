@@ -33,14 +33,14 @@ endif
 
 ifeq ($(HOST),mac)
 install:
-	something
+	todo
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
 endif
 
 ifeq ($(HOST),windows)
 install:
-	something
+	todo
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
 endif
