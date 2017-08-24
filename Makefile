@@ -47,5 +47,5 @@ erase:
 restart:
 	nodemcu-uploader --port $(SERIAL_PORT) node restart
 
-terminal:
+console:
 	screen $(SERIAL_PORT) 115200
