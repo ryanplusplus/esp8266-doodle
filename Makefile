@@ -23,9 +23,17 @@ endif
 
 ifeq ($(HOST),mac)
 install:
-	todo
-	sudo pip install esptool
-	sudo pip install nodemcu-uploader
+	echo todo
+	# sudo pip install esptool
+	# sudo pip install nodemcu-uploader
+	curl "https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" -o "usb-to-uart-driver.zip"
+	unzip usb-to-uart-driver.zip
+	rm usb-to-uart-driver.zip
+
+	hdiutil mount SiLabsUSBDriverDisk.dmg
+	sudo installer -store -pkg "/Volumes/Silicon Labs VCP Driver Install Disk/Silicon Labs VCP Driver.pkg" -target /
+	hdiutil unmount "/Volumes/Silicon Labs VCP Driver Install Disk"
+	rm SiLabsUSBDriverDisk.dmg
 endif
 
 ifeq ($(HOST),windows)
