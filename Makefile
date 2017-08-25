@@ -20,9 +20,8 @@ endif
 
 ifeq ($(HOST),mac)
 install:
-	echo todo
-	# sudo pip install esptool
-	# sudo pip install nodemcu-uploader
+	sudo pip install esptool
+	sudo pip install nodemcu-uploader
 	curl "https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" -o "usb-to-uart-driver.zip"
 	unzip usb-to-uart-driver.zip
 	rm usb-to-uart-driver.zip
@@ -38,7 +37,7 @@ flash_firmware: erase
 	echo "After flashing firmware, the filesystem may need to be formatted. This can take a while. Please be patient."
 
 flash_%:
-	cd $* && nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
+	cd $* && nodemcu-uploader --port $(SERIAL_PORT) upload * && nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
 
 erase:
 	esptool.py --baud 115200 --port $(SERIAL_PORT) erase_flash
