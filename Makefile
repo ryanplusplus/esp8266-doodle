@@ -22,9 +22,9 @@ endif
 ifeq ($(HOST),mac)
 .PHONY: install
 install:
-	echo todo
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
+
 	curl "https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" -o "usb-to-uart-driver.zip"
 	unzip usb-to-uart-driver.zip
 	rm usb-to-uart-driver.zip
