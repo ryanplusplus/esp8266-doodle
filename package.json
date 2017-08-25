@@ -1,0 +1,50 @@
+{
+  "name": "etisbew",
+  "version": "0.0.0",
+  "description": "Getting acquainted with the web.",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp",
+    "start": "npm run build && node index.js",
+    "build": "gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gvela024/etisbew.git"
+  },
+  "author": "Gabriel Velasco",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gvela024/etisbew/issues"
+  },
+  "homepage": "https://github.com/gvela024/etisbew#readme",
+  "dependencies": {
+    "babel-core": "^6.24.0",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "babelify": "^7.3.0",
+    "body-parser": "^1.17.1",
+    "browserify": "^14.1.0",
+    "express": "^4.15.2",
+    "express-sslify": "^1.2.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-tap": "^0.1.3",
+    "helmet": "^3.6.0",
+    "jshint": "^2.9.4",
+    "loadjs": "^3.5.0",
+    "mongoose": "^4.9.0",
+    "path": "^0.12.7",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.30.8",
+    "react-dom": "^15.4.2",
+    "react-router-dom": "^4.0.0",
+    "run-sequence": "^1.2.2",
+    "socket.io": "^1.7.3",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "devDependencies": {
+    "mach.js": "^0.5.0",
+    "proxyquire": "^1.7.11"
+  }
+}
