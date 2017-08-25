@@ -8,11 +8,26 @@
 </head>
 
 <body>
-  You don't exist...
-  Pretty ponies...
-  <!-- <script src='/socket.io/socket.io.js'></script> -->
-  <!-- <div id='main'></div> -->
-  <!-- <script src='/bundle.js' type='text/javascript'></script> -->
+  <form action="">
+    <input onclick="gpio_pin1()" type="checkbox" name="gpio" value="pin 1"> Pin 1
+    <br>
+    <input onclick="gpio_pin2()" type="checkbox" name="gpio" value="pin 2"> Pin 2
+  </form>
+
+  <script>
+    function gpio_pin1() {
+      console.log("pin 1");
+      var url = "gpio?pin=1&state=1";
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.send();
+    }
+
+    function gpio_pin2() {
+      console.log("pin 2");
+    }
+  </script>
+
 </body>
 
 </html>
