@@ -1,5 +1,5 @@
-local ssid = "ssid"
-local password = "password"
+local ssid = "HBL"
+local password = "C0A80400C0A804FF"
 
 wifi.setmode(wifi.STATION)
 wifi.sta.config({ ssid = ssid, pwd = password })
