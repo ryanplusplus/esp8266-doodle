@@ -9,21 +9,22 @@
 
 <body>
   <form action="">
-    <input onclick="gpio_pin1()" type="checkbox" name="gpio" value="pin 1"> Pin 1
+    <input onclick="gpio_pin1(this)" type="checkbox" name="gpio" value="pin 1"> Pin 1
     <br>
-    <input onclick="gpio_pin2()" type="checkbox" name="gpio" value="pin 2"> Pin 2
+    <input onclick="gpio_pin2(this)" type="checkbox" name="gpio" value="pin 2"> Pin 2
   </form>
 
   <script>
-    function gpio_pin1() {
-      console.log("pin 1");
-      var url = "gpio?pin=1&state=1";
+    function gpio_pin1(box) {
+      console.log(box.checked);
+      var url = "gpio?pin=1&state=" + box.checked * 1; // yeah whatever, it works
+      console.log(url);
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.send();
     }
 
-    function gpio_pin2() {
+    function gpio_pin2(box) {
       console.log("pin 2");
     }
   </script>
