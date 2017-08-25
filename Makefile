@@ -11,6 +11,7 @@ SERIAL_PORT?=/dev/tty.SLAB_USBtoUART
 endif
 
 ifeq ($(HOST),linux)
+.PHONY: install
 install:
 	sudo apt install screen
 	sudo apt install python-pip
@@ -19,6 +20,7 @@ install:
 endif
 
 ifeq ($(HOST),mac)
+.PHONY: install
 install:
 	echo todo
 	sudo pip install esptool
@@ -33,6 +35,7 @@ install:
 	rm SiLabsUSBDriverDisk.dmg
 endif
 
+.PHONY: flash_firmware
 flash_firmware: erase
 	esptool.py --baud 115200 --port $(SERIAL_PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE) 0x3fc000 firmware/esp_init_data_default.bin 0x7e000 firmware/blank.bin
 	@echo
@@ -41,14 +44,18 @@ flash_firmware: erase
 flash_%:
 	cd $* && nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
 
+.PHONY: erase
 erase:
 	esptool.py --baud 115200 --port $(SERIAL_PORT) erase_flash
 
+.PHONY: format
 format:
 	nodemcu-uploader --port $(SERIAL_PORT) file format
 
+.PHONY: restart
 restart:
 	nodemcu-uploader --port $(SERIAL_PORT) node restart
 
+.PHONY: console
 console:
 	screen $(SERIAL_PORT) 115200
