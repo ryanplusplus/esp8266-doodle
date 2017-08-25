@@ -15,17 +15,19 @@
   </form>
 
   <script>
-    function gpio_pin1(box) {
-      console.log(box.checked);
-      var url = "gpio?pin=1&state=" + box.checked * 1; // yeah whatever, it works
-      console.log(url);
+    function post_pin(pin, state) {
+      var url = "gpio?pin=" + pin + "&state=" + state * 1;
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.send();
     }
 
+    function gpio_pin1(box) {
+      post_pin(1, box.checked);
+    }
+
     function gpio_pin2(box) {
-      console.log("pin 2");
+      post_pin(2, box.checked);
     }
   </script>
 
