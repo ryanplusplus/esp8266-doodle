@@ -22,6 +22,7 @@ endif
 ifeq ($(HOST),mac)
 .PHONY: install
 install:
+	sudo easy_install pip
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
 
@@ -52,8 +53,8 @@ erase:
 format:
 	nodemcu-uploader --port $(SERIAL_PORT) file format
 
-.PHONY: restart
-restart:
+.PHONY: reset
+reset:
 	nodemcu-uploader --port $(SERIAL_PORT) node restart
 
 .PHONY: console
