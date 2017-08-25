@@ -63,6 +63,12 @@ net.createServer(net.TCP):listen(80, function(connection)
             response:close()
           end)
         end)
+      elseif request.resource == '/adc' then
+        send_header(200, response, function()
+          response:send(adc.read(0), function()
+            response:close()
+          end)
+        end)
       else
         send_header(404, response, function()
           send_file('404.html', response, function()

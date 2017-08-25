@@ -8,26 +8,41 @@
 </head>
 
 <body>
-  <form action="">
-    <input onclick="gpio_pin1(this)" type="checkbox" name="gpio" value="pin 1"> Pin 1
-    <br>
-    <input onclick="gpio_pin2(this)" type="checkbox" name="gpio" value="pin 2"> Pin 2
-  </form>
+  <input onclick="gpioPin1(this)" type="checkbox" name="gpio1" value="pin 1"> Pin 1
+  <br>
+  <input onclick="gpioPin2(this)" type="checkbox" name="gpio2" value="pin 2"> Pin 2
+  <br>
+  <button onclick="getTemp()">Get Temperature</button>
+
+  <div id="temperature" style="background-color:grey;color:white;padding:20px;width:300px">
+  </div>
 
   <script>
-    function post_pin(pin, state) {
+    function postPin(pin, state) {
       var url = "gpio?pin=" + pin + "&state=" + state * 1;
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.send();
     }
 
-    function gpio_pin1(box) {
-      post_pin(1, box.checked);
+    function gpioPin1(box) {
+      postPin(1, box.checked);
     }
 
-    function gpio_pin2(box) {
-      post_pin(2, box.checked);
+    function gpioPin2(box) {
+      postPin(2, box.checked);
+    }
+
+    function getTemp() {
+      var url = "adc";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.addEventListener("load", function() {
+        var serverResponse = xhr.responseText;
+        document.getElementById("temperature").innerHTML = serverResponse;
+        console.log(serverResponse);
+      });
+      xhr.send();
     }
   </script>
 
