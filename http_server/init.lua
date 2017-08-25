@@ -1,3 +1,9 @@
+gpio.mode(8, gpio.OUTPUT)
+
+wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function()
+  gpio.write(8, gpio.HIGH)
+end)
+
 local function send_header(status, connection, callback)
   local message = {
     [200] = 'OK',
@@ -59,13 +65,14 @@ net.createServer(net.TCP):listen(80, function(connection)
         end)
       else
         send_header(404, response, function()
-          send_file('whoops.html', response, function()
+          send_file('404.html', response, function()
             response:close()
           end)
         end)
       end
     elseif request.method == 'POST' then
       if request.resource == '/gpio' then
+        gpio.mode(request.args.pin, gpio.OUTPUT)
         gpio.write(request.args.pin, request.args.state)
 
         send_header(200, response, function()
@@ -73,14 +80,14 @@ net.createServer(net.TCP):listen(80, function(connection)
         end)
       else
         send_header(404, response, function()
-          send_file('whoops.html', response, function()
+          send_file('404.html', response, function()
             response:close()
           end)
         end)
       end
     else
       send_header(404, response, function()
-        send_file('whoops.html', response, function()
+        send_file('404.html', response, function()
           response:close()
         end)
       end)
