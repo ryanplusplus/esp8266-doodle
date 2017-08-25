@@ -66,7 +66,7 @@ net.createServer(net.TCP):listen(80, function(connection)
       end
     elseif request.method == 'POST' then
       if request.resource == '/gpio' then
-        gpio.write(args.pin, args.state)
+        gpio.write(request.args.pin, request.args.state)
 
         send_header(200, response, function()
           response:close()
