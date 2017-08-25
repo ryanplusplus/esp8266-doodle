@@ -8,10 +8,8 @@ local function send_file(filename, connection, callback)
   local function send_next_chunk()
     local chunk = f:read(1000)
     if chunk then
-      print('sending chunk')
       connection:send(chunk, send_next_chunk)
     else
-      print('done sending chunks')
       f:close()
       callback()
     end
