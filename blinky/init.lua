@@ -1,13 +1,13 @@
-gpio.mode(0, gpio.OUTPUT)
+local pin = 1
 
-local timer = tmr.create()
+gpio.mode(pin, gpio.OUTPUT)
 
-local current = gpio.HIGH
-timer:alarm(500, tmr.ALARM_AUTO, function()
-  gpio.write(0, current)
-  if current == gpio.HIGH then
-    current = gpio.LOW
-  else
-    current = gpio.HIGH
+tmr.create():alarm(500, tmr.ALARM_AUTO, coroutine.wrap(function()
+  while true do
+    gpio.write(pin, gpio.HIGH)
+    coroutine.yield()
+
+    gpio.write(pin, gpio.LOW)
+    coroutine.yield()
   end
-end)
+end))
