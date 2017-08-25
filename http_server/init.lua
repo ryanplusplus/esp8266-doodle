@@ -1,5 +1,15 @@
 local function send_header(status, connection, callback)
-  connection:send('HTTP/1.0 200 OK\r\nServer: NodeMCU on ESP8266\r\nContent-Type: text/html\r\n\r\n', callback)
+  local message = {
+    [200] = 'OK',
+    [404] = 'Not found'
+  }
+
+  local header =
+    'HTTP/1.0 ' .. status .. ' ' .. message[status] .. '\r\n' ..
+    'Server: NodeMCU on ESP8266\r\n' ..
+    'Content-Type: text/html\r\n\r\n'
+
+  connection:send(header, callback)
 end
 
 local function send_file(filename, connection, callback)
