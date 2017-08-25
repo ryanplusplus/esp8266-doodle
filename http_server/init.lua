@@ -1,20 +1,33 @@
-local function read_file(filename)
-  local file = io.open(filename, 'rb')
-  local content = file:read('*all')
-  io.close(file)
-  return content
+local function send_header(status, connection, callback)
+  connection:send('HTTP/1.0 200 OK\r\nServer: NodeMCU on ESP8266\r\nContent-Type: text/html\r\n\r\n', callback)
+end
+
+local function send_file(filename, connection, callback)
+  local f = file.open(filename, 'r')
+
+  local function send_next_chunk()
+    local chunk = f:read(1000)
+    if chunk then
+      print('sending chunk')
+      connection:send(chunk, send_next_chunk)
+    else
+      print('done sending chunks')
+      f:close()
+      callback()
+    end
+  end
+
+  send_next_chunk()
 end
 
 net.createServer(net.TCP):listen(80, function(connection)
-  connection:on('receive', function(connection, payload)
-    local response =
-      'HTTP/1.0 200 OK\r\nServer: NodeMCU on ESP8266\r\nContent-Type: text/html\r\n\r\n' ..
-      read_file("index.html")
+  connection:on('receive', function(response, request)
+    print(request)
 
-    print(payload)
-
-    connection:send(response, function()
-      connection:close()
+    send_header(200, response, function()
+      send_file('index.html', response, function()
+        response:close()
+      end)
     end)
   end)
 end)
