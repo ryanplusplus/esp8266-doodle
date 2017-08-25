@@ -10,10 +10,6 @@ ifeq ($(HOST),mac)
 SERIAL_PORT?=/dev/tty.SLAB_USBtoUART
 endif
 
-ifeq ($(HOST),windows)
-SERIAL_PORT?=COM1
-endif
-
 ifeq ($(HOST),linux)
 install:
 	sudo apt install screen
@@ -29,19 +25,12 @@ install:
 	sudo pip install nodemcu-uploader
 endif
 
-ifeq ($(HOST),windows)
-install:
-	todo
-	sudo pip install esptool
-	sudo pip install nodemcu-uploader
-endif
-
 flash_firmware: erase
 	esptool.py --baud 115200 --port $(SERIAL_PORT) write_flash -fm dio -fs 4MB 0x00000 $(FIRMWARE) 0x3fc000 firmware/esp_init_data_default.bin 0x7e000 firmware/blank.bin
 	echo "After flashing firmware, the filesystem may need to be formatted. This can take a while. Please be patient."
 
 flash_%:
-	cd $*; nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
+	cd $* && nodemcu-uploader --port $(SERIAL_PORT) upload *.lua --compile
 
 erase:
 	esptool.py --baud 115200 --port $(SERIAL_PORT) erase_flash
