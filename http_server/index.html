@@ -4,18 +4,15 @@
 <head>
   <meta charset='UTF-8' />
   <title>Magic comes from the stars</title>
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 
 <body>
-  <input onclick="gpioPin1(this)" type="checkbox" name="gpio1" value="pin 1"> Pin 1
+  GPIO 1<input onclick="gpioPin1(this)" type="checkbox">
   <br>
-  <input onclick="gpioPin2(this)" type="checkbox" name="gpio2" value="pin 2"> Pin 2
+  GPIO 2<input onclick="gpioPin2(this)" type="checkbox">
   <br>
-  <button onclick="getTemp()">Get Temperature</button>
-
-  <div id="temperature" style="background-color:grey;color:white;padding:20px;width:300px">
-  </div>
+  ADC 0<div id="adc0" />
 
   <script>
     function postPin(pin, state) {
@@ -33,17 +30,20 @@
       postPin(2, box.checked);
     }
 
-    function getTemp() {
-      var url = "adc";
+    function queryAdc0() {
+      var url = "adc?pin=0";
       var xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
       xhr.addEventListener("load", function() {
         var serverResponse = xhr.responseText;
-        document.getElementById("temperature").innerHTML = serverResponse;
-        console.log(serverResponse);
+        document.getElementById("adc0").innerHTML = serverResponse;
       });
       xhr.send();
     }
+
+    window.onload = function() {
+      setInterval(queryAdc0, 1000);
+    };
   </script>
 
 </body>

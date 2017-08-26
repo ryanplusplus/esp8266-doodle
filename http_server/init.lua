@@ -1,102 +1,35 @@
-gpio.mode(8, gpio.OUTPUT)
+local port = 80
 
 wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function()
+  gpio.mode(8, gpio.OUTPUT)
   gpio.write(8, gpio.HIGH)
+  print('Server running on http://' .. wifi.sta.getip() .. ':' .. port)
 end)
 
-local function send_header(status, connection, callback)
-  local message = {
-    [200] = 'OK',
-    [404] = 'FILE NOT FOUND'
-  }
+local Server = dofile('Server.lc')
+local server = Server(port)
 
-  local header =
-    'HTTP/1.0 ' .. status .. ' ' .. message[status] .. '\r\n' ..
-    'Server: NodeMCU on ESP8266\r\n' ..
-    'Content-Type: text/html\r\n\r\n'
+server.get('/', function(request, response)
+  response.begin(function()
+    response.write_file('index.html', function()
+      response.finish()
+    end)
+  end)
+end)
 
-  connection:send(header, callback)
-end
+server.post('/gpio', function(request, response)
+  gpio.mode(request.params.pin, gpio.OUTPUT)
+  gpio.write(request.params.pin, request.params.state)
 
-local function send_file(filename, connection, callback)
-  local f = file.open(filename, 'r')
+  response.begin(function()
+    response.finish()
+  end)
+end)
 
-  local function send_next_chunk()
-    local chunk = f:read(1000)
-    if chunk then
-      connection:send(chunk, send_next_chunk)
-    else
-      f:close()
-      callback()
-    end
-  end
-
-  send_next_chunk()
-end
-
-local function parse_request(request)
-  local args = {}
-  local method, resource = request:match('(%w*) ([^%?%s]*)%??')
-  local arg_string = request:match('?([^%s]*)') or ''
-
-  for name, value in arg_string:gmatch('(%w*)=(%w*)') do
-    args[name] = value
-  end
-
-  return {
-    method = method,
-    resource = resource,
-    args = args
-  }
-end
-
-net.createServer(net.TCP):listen(80, function(connection)
-  connection:on('receive', function(response, request)
-    print(request)
-
-    request = parse_request(request)
-
-    if request.method == 'GET' then
-      if request.resource == '/' then
-        send_header(200, response, function()
-          send_file('index.html', response, function()
-            response:close()
-          end)
-        end)
-      elseif request.resource == '/adc' then
-        send_header(200, response, function()
-          response:send(adc.read(0), function()
-            response:close()
-          end)
-        end)
-      else
-        send_header(404, response, function()
-          send_file('404.html', response, function()
-            response:close()
-          end)
-        end)
-      end
-    elseif request.method == 'POST' then
-      if request.resource == '/gpio' then
-        gpio.mode(request.args.pin, gpio.OUTPUT)
-        gpio.write(request.args.pin, request.args.state)
-
-        send_header(200, response, function()
-          response:close()
-        end)
-      else
-        send_header(404, response, function()
-          send_file('404.html', response, function()
-            response:close()
-          end)
-        end)
-      end
-    else
-      send_header(404, response, function()
-        send_file('404.html', response, function()
-          response:close()
-        end)
-      end)
-    end
+server.get('/adc', function(request, response)
+  response.begin(function()
+    response.write(adc.read(request.params.pin), function()
+      response.finish()
+    end)
   end)
 end)
