@@ -34,6 +34,9 @@ make flash_http_server
 ### NodeMCU Documentation
 https://nodemcu.readthedocs.io/en/master/
 
+### Pinout
+![Pinout](https://raw.githubusercontent.com/nodemcu/nodemcu-devkit-v1.0/master/Documents/NODEMCU_DEVKIT_V1.0_PINMAP.png)
+
 ### Fancy Framework
 https://github.com/devyte/nodemcu-platform
 
