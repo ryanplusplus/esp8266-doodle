@@ -2,7 +2,8 @@ FIRMWARE?=firmware/nodemcu-master-10-modules-2017-09-01-17-47-52-integer.bin
 
 include os.mk
 
-SERIAL_PORT?=$(shell ls /dev/ | grep -m1 -i usb)
+#
+SERIAL_PORT?=$(shell ls /dev/ | grep -i tty | grep -m1 -i usb)
 
 ifeq ($(HOST),linux)
 .PHONY: install
