@@ -15,19 +15,19 @@
   ADC 0<div id="adc0" />
 
   <script>
-    function postPin(pin, state) {
-      var url = "gpio?pin=" + pin + "&state=" + state * 1;
+    function postGpioWrite(pin, state) {
+      var url = "gpio_write?pin=" + pin + "&state=" + state * 1;
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.send();
     }
 
     function gpioPin1(box) {
-      postPin(1, box.checked);
+      postGpioWrite(1, box.checked);
     }
 
     function gpioPin2(box) {
-      postPin(2, box.checked);
+      postGpioWrite(2, box.checked);
     }
 
     function queryAdc0() {
@@ -42,7 +42,7 @@
     }
 
     window.onload = function() {
-      setInterval(queryAdc0, 1000);
+      setInterval(queryAdc0, 10000);
     };
   </script>
 
