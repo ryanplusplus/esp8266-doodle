@@ -4,15 +4,48 @@
 <head>
   <meta charset='UTF-8' />
   <title>Magic comes from the stars</title>
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 
 <body>
-  You don't exist...
-  Pretty ponies...
-  <!-- <script src='/socket.io/socket.io.js'></script> -->
-  <!-- <div id='main'></div> -->
-  <!-- <script src='/bundle.js' type='text/javascript'></script> -->
+  GPIO 1<input onclick="gpioPin1(this)" type="checkbox">
+  <br>
+  GPIO 2<input onclick="gpioPin2(this)" type="checkbox">
+  <br>
+  ADC 0<div id="adc0" />
+
+  <script>
+    function postGpioWrite(pin, state) {
+      var url = "gpio_write?pin=" + pin + "&state=" + state * 1;
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.send();
+    }
+
+    function gpioPin1(box) {
+      postGpioWrite(1, box.checked);
+    }
+
+    function gpioPin2(box) {
+      postGpioWrite(2, box.checked);
+    }
+
+    function queryAdc0() {
+      var url = "adc?pin=0";
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.addEventListener("load", function() {
+        var serverResponse = xhr.responseText;
+        document.getElementById("adc0").innerHTML = serverResponse;
+      });
+      xhr.send();
+    }
+
+    window.onload = function() {
+      setInterval(queryAdc0, 10000);
+    };
+  </script>
+
 </body>
 
 </html>

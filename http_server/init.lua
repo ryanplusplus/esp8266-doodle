@@ -1,45 +1,58 @@
-local function send_header(status, connection, callback)
-  connection:send('HTTP/1.0 200 OK\r\nServer: NodeMCU on ESP8266\r\nContent-Type: text/html\r\n\r\n', callback)
-end
+local port = 80
 
-local function send_file(filename, connection, callback)
-  local f = file.open(filename, 'r')
+wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function()
+  gpio.mode(8, gpio.OUTPUT)
+  gpio.write(8, gpio.HIGH)
+  print('Server running on http://' .. wifi.sta.getip() .. ':' .. port)
+end)
 
-  local function send_next_chunk()
-    local chunk = f:read(1000)
-    if chunk then
-      connection:send(chunk, send_next_chunk)
-    else
-      f:close()
-      callback()
-    end
-  end
+local Server = dofile('Server.lc')
+local server = Server(port)
 
-  send_next_chunk()
-end
-
-net.createServer(net.TCP):listen(80, function(connection)
-  connection:on('receive', function(response, request)
-    print(request)
-
-    send_header(200, response, function()
-      send_file('index.html', response, function()
-        response:close()
-      end)
+server.get('/', function(request, response)
+  response.begin(function()
+    response.write_file('index.html', function()
+      response.finish()
     end)
   end)
 end)
 
-local pin = 1
+server.post('/gpio_write', function(request, response)
+  gpio.mode(request.params.pin, gpio.OUTPUT)
+  gpio.write(request.params.pin, request.params.state)
 
-gpio.mode(pin, gpio.OUTPUT)
+  response.begin(function()
+    response.finish()
+  end)
+end)
 
-tmr.create():alarm(500, tmr.ALARM_AUTO, coroutine.wrap(function()
-  while true do
-    gpio.write(pin, gpio.HIGH)
-    coroutine.yield()
+server.post('/gpio_read', function(request, response)
+  gpio.mode(request.params.pin, gpio.INPUT)
+  local value = gpio.read(request.params.pin)
 
-    gpio.write(pin, gpio.LOW)
-    coroutine.yield()
-  end
-end))
+  response.begin(function()
+    response.write(value, function()
+      response.finish()
+    end)
+  end)
+end)
+
+server.post('/pwm', function(request, response)
+  pwm.setup(request.params.pin, 1000, 0)
+  pwm.start(request.params.pin)
+  pwm.setduty(request.params.pin, request.params.duty)
+
+  response.begin(function()
+    response.finish()
+  end)
+end)
+
+server.get('/adc', function(request, response)
+  local value = adc.read(request.params.pin)
+
+  response.begin(function()
+    response.write(value, function()
+      response.finish()
+    end)
+  end)
+end)
