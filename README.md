@@ -7,7 +7,7 @@ Install dependencies on Mac or Linux.
 Erase the device and flash the included firmware. To flash your own firmware, set the `FIRMWARE` variable to the path a firmware image.
 
 The included firmware is built with:
-> adc, bit, file, gpio, http, hx711, net, node, pwm, spi, tmr, uart, wifi
+> adc, file, gpio, http, net, node, pwm, tmr, uart, wifi
 
 ### make erase
 Erase the device.

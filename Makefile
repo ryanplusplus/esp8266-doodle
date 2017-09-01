@@ -1,4 +1,4 @@
-FIRMWARE?=firmware/nodemcu-master-13-modules-2017-08-22-13-11-15-integer.bin
+FIRMWARE?=firmware/nodemcu-master-10-modules-2017-09-01-17-47-52-integer.bin
 
 include os.mk
 
@@ -12,8 +12,8 @@ endif
 
 ifeq ($(HOST),linux)
 .PHONY: install
-install:
 	sudo apt install screen
+install:
 	sudo apt install python-pip
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
