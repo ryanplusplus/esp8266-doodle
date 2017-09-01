@@ -1,19 +1,14 @@
-FIRMWARE?=firmware/nodemcu-master-13-modules-2017-08-22-13-11-15-integer.bin
+FIRMWARE?=firmware/nodemcu-master-10-modules-2017-09-01-17-47-52-integer.bin
 
 include os.mk
 
-ifeq ($(HOST),linux)
-SERIAL_PORT?=/dev/ttyUSB0
-endif
-
-ifeq ($(HOST),mac)
-SERIAL_PORT?=/dev/tty.SLAB_USBtoUART
-endif
+#
+SERIAL_PORT?=$(shell ls /dev/ | grep -i tty | grep -m1 -i usb)
 
 ifeq ($(HOST),linux)
 .PHONY: install
-install:
 	sudo apt install screen
+install:
 	sudo apt install python-pip
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
@@ -26,14 +21,12 @@ install:
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
 
-	curl "https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip" -o "usb-to-uart-driver.zip"
+	curl "http://www.wch.cn/downfile/178" -o "usb-to-uart-driver.zip"
 	unzip usb-to-uart-driver.zip
 	rm usb-to-uart-driver.zip
 
-	hdiutil mount SiLabsUSBDriverDisk.dmg
-	sudo installer -store -pkg "/Volumes/Silicon Labs VCP Driver Install Disk/Silicon Labs VCP Driver.pkg" -target /
-	hdiutil unmount "/Volumes/Silicon Labs VCP Driver Install Disk"
-	rm SiLabsUSBDriverDisk.dmg
+	sudo installer -store -pkg "CH34x_Install_V1.3.pkg" -target /
+	rm CH34x_Install_V1.3.pkg
 endif
 
 .PHONY: flash_firmware

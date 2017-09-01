@@ -17,7 +17,7 @@ server.get('/', function(request, response)
   end)
 end)
 
-server.post('/gpio', function(request, response)
+server.post('/gpio_write', function(request, response)
   gpio.mode(request.params.pin, gpio.OUTPUT)
   gpio.write(request.params.pin, request.params.state)
 
@@ -26,18 +26,32 @@ server.post('/gpio', function(request, response)
   end)
 end)
 
+server.post('/gpio_read', function(request, response)
+  gpio.mode(request.params.pin, gpio.INPUT)
+  local value = gpio.read(request.params.pin)
+
+  response.begin(function()
+    response.write(value, function()
+      response.finish()
+    end)
+  end)
+end)
+
 server.post('/pwm', function(request, response)
-  pwm.setup(request.params.pin,100,0)
+  pwm.setup(request.params.pin, 1000, 0)
   pwm.start(request.params.pin)
   pwm.setduty(request.params.pin, request.params.duty)
+
   response.begin(function()
     response.finish()
   end)
 end)
 
 server.get('/adc', function(request, response)
+  local value = adc.read(request.params.pin)
+
   response.begin(function()
-    response.write(adc.read(request.params.pin), function()
+    response.write(value, function()
       response.finish()
     end)
   end)
