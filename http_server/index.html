@@ -15,7 +15,7 @@
   ADC 0<div id="adc0" />
   pin 3 Pwm
   <div id="slidecontainer" style="width: 50%">
-    <input type="range" min="1" max="1023" value="512" class="slider" id="pwmRangeSlider" onmouseup="postPwm(3, this);">
+    <input type="range" min="1" max="1023" value="512" class="slider" id="pwmRangeSlider" >
       <p>PwmValue: <span id="pwmSliderValue"></span></p>
   </div>
 
@@ -27,6 +27,10 @@
 
   slider.oninput = function() {
     pwmSliderValueOutput.innerHTML = this.value;
+  }
+
+  slider.onmouseup = function() {
+    postPwm(3, this.value)
   }
 
     function postGpioWrite(pin, state) {
@@ -64,6 +68,7 @@
     }
 
     window.onload = function() {
+      postPwm(3, slider.value)
       // setInterval(queryAdc0, 10000);
     };
   </script>
