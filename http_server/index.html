@@ -13,10 +13,36 @@
   GPIO 2<input onclick="gpioPin2(this)" type="checkbox">
   <br>
   ADC 0<div id="adc0" />
+  pin 3 Pwm
+  <div id="slidecontainer" style="width:50%; margin: 10px 10px 10px 10px;">
+    <input type="range" min="1" max="1023" value="512" class="slider" id="pwmRangeSlider" >
+      <p>PwmValue: <span id="pwmSliderValue"></span></p>
+  </div>
 
   <script>
+
+  var slider = document.getElementById("pwmRangeSlider");
+  var pwmSliderValueOutput = document.getElementById("pwmSliderValue");
+  pwmSliderValueOutput.innerHTML = slider.value;
+
+  slider.oninput = function() {
+    pwmSliderValueOutput.innerHTML = this.value;
+  }
+
+  slider.onmouseup = function() {
+    postPwm(3, this.value)
+  }
+
     function postGpioWrite(pin, state) {
       var url = "gpio_write?pin=" + pin + "&state=" + state * 1;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.send();
+    }
+
+    function postPwm(pin, duty) {
+      var url = "pwm?pin=" + pin + "&duty=" + duty;
       var xhr = new XMLHttpRequest();
       xhr.open("POST", url, true);
       xhr.send();
@@ -42,6 +68,7 @@
     }
 
     window.onload = function() {
+      postPwm(3, slider.value)
       // setInterval(queryAdc0, 10000);
     };
   </script>
