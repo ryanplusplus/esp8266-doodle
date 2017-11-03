@@ -1,4 +1,7 @@
 # esp8266-doodle
+## What?
+http://esp8266.net/
+
 ## Usage
 ### make install
 Install dependencies on Mac or Linux.
