@@ -6,8 +6,8 @@ SERIAL_PORT?=/dev/$(shell ls /dev/ | grep -i tty | grep -m1 -i usb)
 
 ifeq ($(HOST),linux)
 .PHONY: install
-	sudo apt install screen
 install:
+	sudo apt install screen
 	sudo apt install python-pip
 	sudo pip install esptool
 	sudo pip install nodemcu-uploader
