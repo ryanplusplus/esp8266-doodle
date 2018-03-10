@@ -22,7 +22,7 @@ Format the file system.
 Reset the device.
 
 ### make console
-Open up a serial console using GNU `screen`.
+Open a serial console using GNU `screen`.
 
 ### make flash_(project)
 Copy all files in the folder `(project)` to the device's file system. This will automatically pre-compile all `.lua` files to `.lc` files. Note that this does not remove any files from the file system that were previously loaded unless they are overwritten by the files in the project. To remove files from another project to save space, use `make format`.
