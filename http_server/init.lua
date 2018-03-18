@@ -6,8 +6,7 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function()
   print('Server running on http://' .. wifi.sta.getip() .. ':' .. port)
 end)
 
-local Server = dofile('Server.lc')
-local server = Server(port)
+local server = dofile('Server.lc')(port)
 
 server.get('/', function(request, response)
   response.write_file('index.html')
