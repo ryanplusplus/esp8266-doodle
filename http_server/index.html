@@ -8,9 +8,11 @@
 </head>
 
 <body>
-  GPIO 1<input onclick="gpioPin1(this)" type="checkbox">
+  LED<input id="led" type="checkbox">
   <br>
-  GPIO 2<input onclick="gpioPin2(this)" type="checkbox">
+  GPIO 1<input id="gpio1" type="checkbox">
+  <br>
+  GPIO 2<input id="gpio2" type="checkbox">
   <br>
   ADC 0<div id="adc0" />
   pin 3 Pwm
@@ -20,59 +22,61 @@
   </div>
 
   <script>
+    var slider = document.getElementById("pwmRangeSlider");
+    var pwmSliderValueOutput = document.getElementById("pwmSliderValue");
+    pwmSliderValueOutput.innerHTML = slider.value;
 
-  var slider = document.getElementById("pwmRangeSlider");
-  var pwmSliderValueOutput = document.getElementById("pwmSliderValue");
-  pwmSliderValueOutput.innerHTML = slider.value;
+    slider.oninput = function() {
+      pwmSliderValueOutput.innerHTML = this.value;
+    }
 
-  slider.oninput = function() {
-    pwmSliderValueOutput.innerHTML = this.value;
-  }
-
-  slider.onmouseup = function() {
-    postPwm(3, this.value)
-  }
+    slider.onmouseup = function() {
+      postPwm(3, this.value)
+    }
 
     function postGpioWrite(pin, state) {
-      var url = "gpio_write?pin=" + pin + "&state=" + state * 1;
+      var url = 'gpio_write?pin=' + pin + '&state=' + state * 1;
 
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
+      xhr.open('POST', url, true);
       xhr.send();
     }
 
     function postPwm(pin, duty) {
-      var url = "pwm?pin=" + pin + "&duty=" + duty;
+      var url = 'pwm?pin=' + pin + '&duty=' + duty;
       var xhr = new XMLHttpRequest();
-      xhr.open("POST", url, true);
+      xhr.open('POST', url, true);
       xhr.send();
-    }
-
-    function gpioPin1(box) {
-      postGpioWrite(1, box.checked);
-    }
-
-    function gpioPin2(box) {
-      postGpioWrite(2, box.checked);
     }
 
     function queryAdc0() {
-      var url = "adc?pin=0";
+      var url = 'adc?pin=0';
       var xhr = new XMLHttpRequest();
-      xhr.open("GET", url, true);
-      xhr.addEventListener("load", function() {
+      xhr.open('GET', url, true);
+      xhr.addEventListener('load', function() {
         var serverResponse = xhr.responseText;
-        document.getElementById("adc0").innerHTML = serverResponse;
+        document.getElementById('adc0').innerHTML = serverResponse;
       });
       xhr.send();
     }
+
+    document.getElementById('led').onclick = function() {
+      postGpioWrite(0, !this.checked);
+    };
+
+    document.getElementById('gpio1').onclick = function() {
+      postGpioWrite(1, this.checked);
+    };
+
+    document.getElementById('gpio2').onclick = function() {
+      postGpioWrite(2, this.checked);
+    };
 
     window.onload = function() {
       postPwm(3, slider.value)
       // setInterval(queryAdc0, 10000);
     };
   </script>
-
 </body>
 
 </html>

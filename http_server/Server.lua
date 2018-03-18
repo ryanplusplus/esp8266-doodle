@@ -7,20 +7,20 @@ local function write_header(response, callback)
   response:send(header, callback)
 end
 
-local function write_file(filename, response, callback)
+local function write_file(filename, response, co)
   local f = file.open(filename, 'r')
 
-  local function send_next_chunk()
+  while true do
     local chunk = f:read(1000)
     if chunk then
-      response:send(chunk, send_next_chunk)
+      response:send(chunk, function() coroutine.resume(co) end)
+      coroutine.yield()
     else
-      f:close()
-      callback()
+      break
     end
   end
 
-  send_next_chunk()
+  f:close()
 end
 
 local function parse_request(request)
@@ -52,12 +52,25 @@ return function(port)
       request = parse_request(request)
 
       if routes[request.method][request.url] then
-        routes[request.method][request.url](request, {
-          begin = function(callback) write_header(response, callback) end,
-          write = function(value, callback) response:send(value, callback) end,
-          write_file = function(filename, callback) write_file(filename, response, callback) end,
-          finish = function() response:close() end
-        })
+        local co
+        co = coroutine.create(function()
+          write_header(response, function() coroutine.resume(co) end)
+          coroutine.yield()
+
+          routes[request.method][request.url](request, {
+            write = function(value)
+              response:send(value, function() coroutine.resume(co) end)
+              coroutine.yield()
+            end,
+            write_file = function(filename)
+              write_file(filename, response, co)
+            end
+          })
+
+          response:close()
+        end)
+
+        coroutine.resume(co)
       end
     end)
   end)
