@@ -8,13 +8,6 @@ return function(display, data)
     end
   end
 
-  if #offline > 0 then
-    gpio.mode(0, gpio.OUTPUT)
-    gpio.write(0, 0)
-  end
-
-  print('Online: ' .. online_count .. ' / ' .. #data)
-
   display.draw(function(display)
     display:drawStr(0, 0, 'Online: ' .. online_count .. ' / ' .. #data)
     for i, name in ipairs(offline) do

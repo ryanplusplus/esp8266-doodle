@@ -23,7 +23,9 @@ return function()
 
   return {
     feed = function(json)
-      decoder:write(json)
+      pcall(function()
+        decoder:write(json)
+      end)
     end,
 
     finalize = function()
