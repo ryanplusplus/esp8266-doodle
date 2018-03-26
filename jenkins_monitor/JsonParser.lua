@@ -28,6 +28,10 @@ return function()
       end)
     end,
 
+    finished = function()
+      return (pcall(function() decoder:result() end))
+    end,
+
     finalize = function()
       return data
     end

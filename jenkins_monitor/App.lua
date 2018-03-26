@@ -30,7 +30,13 @@ return function()
   while true do
     local json_parser = require 'JsonParser'()
     get(config, json_parser.feed)
-    show(display, json_parser.finalize())
-    delay(30 * 1000)
+    if json_parser.finished() then
+      show(display, json_parser.finalize())
+      delay(30 * 1000)
+    else
+      display.draw(function(display)
+        display:drawStr(0, 0, 'Reconnecting...')
+      end)
+    end
   end
 end
