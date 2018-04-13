@@ -5,17 +5,16 @@ return function(config, on_data)
   local timed_out
   local socket = (config.tls and tls or net).createConnection()
 
-  socket:on('receive', function(socket, data)
-    timer:register(1000, tmr.ALARM_SINGLE, function()
-      timed_out = true
-      socket:close()
-      timer:unregister()
-      node.task.post(function()
-        coroutine.resume(co)
-      end)
+  timer:alarm(7000, tmr.ALARM_SINGLE, function()
+    timed_out = true
+    socket:close()
+    timer:unregister()
+    node.task.post(function()
+      coroutine.resume(co)
     end)
-    timer:start()
+  end)
 
+  socket:on('receive', function(socket, data)
     if not timed_out then
       if not got_header then
         local data = data:match('\r\n\r\n(.*)')
@@ -30,7 +29,9 @@ return function(config, on_data)
   end)
 
   socket:on('connection', function(socket)
-    socket:send('GET ' .. config.resource .. ' HTTP/1.1\r\nConnection: close\r\nHost: ' .. config.host .. '\r\nAccept: */*\r\n\r\n')
+    if not timed_out then
+      socket:send('GET ' .. config.resource .. ' HTTP/1.1\r\nConnection: close\r\nHost: ' .. config.host .. '\r\nAccept: */*\r\n\r\n')
+    end
   end)
 
   socket:connect(config.port, config.server)
