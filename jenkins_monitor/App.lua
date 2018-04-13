@@ -37,6 +37,7 @@ return function()
       display.draw(function(display)
         display:drawStr(0, 0, 'Reconnecting...')
       end)
+      delay(3 * 1000)
     end
   end
 end
