@@ -9,7 +9,7 @@ Install `espeon` and all of its dependencies (do this once):
 
 ```shell
 luarocks install espeon
-espeon install_depnedencies
+espeon install_dependencies
 ```
 
 Flash firmware (do this when switching to a new project):
