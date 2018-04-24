@@ -1,6 +1,6 @@
 -- todo: fill in your deets
-local ssid = ''
-local password = ''
+local ssid = 'IdiotOfThings'
+local password = '5a2h2aye!1one'
 
 wifi.setmode(wifi.STATION)
 wifi.sta.config({ ssid = ssid, pwd = password })
