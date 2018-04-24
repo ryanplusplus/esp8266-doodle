@@ -24,8 +24,8 @@ install:
 	unzip usb-to-uart-driver.zip
 	rm usb-to-uart-driver.zip
 
-	sudo installer -store -pkg "CH34x_Install_V1.3.pkg" -target /
-	rm CH34x_Install_V1.3.pkg
+	sudo installer -store -pkg "CH341SER_MAC/CH34x_Install_V1.4.pkg" -target /
+	rm CH341SER_MAC/CH34x_Install_V1.4.pkg
 endif
 
 .PHONY: flash_firmware
