@@ -10,7 +10,7 @@ return function(config, on_data)
     socket:close()
     timer:unregister()
     node.task.post(function()
-      coroutine.resume(co)
+      assert(coroutine.resume(co))
     end)
   end)
 

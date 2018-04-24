@@ -3,5 +3,7 @@ assert(coroutine.resume(coroutine.create(function()
     return dofile(m .. '.lc')
   end
 
-  require 'App'()
+  -- print(pcall(function()
+    require 'App'()
+  -- end))
 end)))

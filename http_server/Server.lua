@@ -13,7 +13,7 @@ local function write_file(filename, response, co)
   while true do
     local chunk = f:read(1000)
     if chunk then
-      response:send(chunk, function() coroutine.resume(co) end)
+      response:send(chunk, function() assert(coroutine.resume(co)) end)
       coroutine.yield()
     else
       break
@@ -54,12 +54,12 @@ return function(port)
       if routes[request.method][request.url] then
         local co
         co = coroutine.create(function()
-          write_header(response, function() coroutine.resume(co) end)
+          write_header(response, function() assert(coroutine.resume(co)) end)
           coroutine.yield()
 
           routes[request.method][request.url](request, {
             write = function(value)
-              response:send(value, function() coroutine.resume(co) end)
+              response:send(value, function() assert(coroutine.resume(co)) end)
               coroutine.yield()
             end,
             write_file = function(filename)
@@ -70,7 +70,7 @@ return function(port)
           response:close()
         end)
 
-        coroutine.resume(co)
+        assert(coroutine.resume(co))
       end
     end)
   end)
