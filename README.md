@@ -1,36 +1,38 @@
 # esp8266-doodle
+Projects using NodeMCU (Lua) firmware for ESP8266. Project management is handled with [espeon](https://github.com/ryanplusplus/espeon).
+
 ## What?
 http://esp8266.net/
 
-## Usage
-### make install
-Install dependencies on Mac or Linux.
+## Getting Started
+Install `espeon` and all of its dependencies (do this once):
 
-### make flash_firmware
-Erase the device and flash the included firmware. To flash your own firmware, set the `FIRMWARE` variable to the path a firmware image.
-
-The included firmware is built with:
-> adc, file, gpio, http, net, node, pwm, tmr, uart, wifi
-
-### make erase
-Erase the device.
-
-### make format
-Format the file system.
-
-### make reset
-Reset the device.
-
-### make console
-Open a serial console using GNU `screen`.
-
-### make flash_(project)
-Copy all files in the folder `(project)` to the device's file system. This will automatically pre-compile all `.lua` files to `.lc` files. Note that this does not remove any files from the file system that were previously loaded unless they are overwritten by the files in the project. To remove files from another project to save space, use `make format`.
-
-Example:
-
+```shell
+luarocks install espeon
+espeon install_depnedencies
 ```
-make flash_http_server
+
+Flash firmware (do this when switching to a new project):
+
+```shell
+# Enter the project directory first
+cd blinky
+espeon flash_firmware
+
+# Wait a bit for the filesystem to be formatted
+```
+
+Flash application (do this after you've made some changes):
+
+```shell
+# While in the project directory
+espeon flash
+```
+
+Resetting the board (do this or press the reset button after flashing):
+
+```shell
+espeon reset
 ```
 
 ## Resources
@@ -44,6 +46,10 @@ https://nodemcu.readthedocs.io/en/master/
 https://github.com/devyte/nodemcu-platform
 
 ## Tools
+### Espeon
+https://github.com/ryanplusplus/espeon
+http://luarocks.org/modules/ryanplusplus/espeon
+
 ### Firmware Build Service
 https://nodemcu-build.com/
 

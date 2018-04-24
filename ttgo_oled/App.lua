@@ -5,6 +5,7 @@ return function()
   local display = Display(ssd1306)
 
   display.draw(function(display)
+    poop()
     display:drawStr(0, 0, 'Hello, world!')
     display:drawStr(15, 15, 'Hello, world!')
   end)
